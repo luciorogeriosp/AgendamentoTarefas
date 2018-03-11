@@ -1,0 +1,30 @@
+﻿@model List<AgendamentoTarefas.AgendadorTarefasModel>
+@if (Model == null || Model.Count == 0)
+{
+    <text>Não existem processos na fila.</text>
+}
+else
+{
+<table>
+    <tr>
+        <td><b>ID</b></td>
+        <td><b>Situacao</b></td>
+        <td><b>Tipo</b></td>
+        <td><b>Detalhes</b></td>
+    </tr>
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>@item.ID</td>
+        <td>@(Convert.ToString(item.Situacao))</td>
+        <td>@(Convert.ToString(item.Tipo))</td>
+        <td>@switch (item.Tipo)
+            {
+                case AgendamentoTarefas.TipoProcesso.CompactacaoPasta:
+                    @(item.Objeto as string);
+                                            break;
+            }</td>
+    </tr>        
+    }
+</table>
+}

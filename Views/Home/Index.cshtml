@@ -1,0 +1,54 @@
+﻿<div id="body">
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>Multi - Thread App</h1>
+            </hgroup>
+        </div>
+    </section>
+    <section class="content-wrapper main-content clear-fix">
+    @Html.TextBox("txtDiretorio")<br />
+    <input type="button" id="btnProcessar" value="Processar" onclick="fcProcessarDiretorio();" />
+    <br /><br />
+    <div id="pnlListagem"></div>
+    </section>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script language="javascript" type="text/javascript">
+
+    function fcProcessarDiretorio() {
+        $.ajax({
+            cache: false,
+            type: "POST",
+            data: { "diretorio" : $("#txtDiretorio").val()},
+            url: "@(Url.Action("ProcessarDiretorio", "Home"))",
+            success:function(data)
+            {
+                $("#txtDiretorio").val("");
+            }, error:function(data)
+            {
+                alert("Ocorreu um erro");
+            }
+        }); 
+    }
+
+    function fcAtualizarLista() {
+        clearInterval(iAtualizarLista);
+
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "@(Url.Action("VisualizaProcessos", "Home"))",
+            success:function(data)
+            {
+                $("#pnlListagem").html(data);
+                iAtualizarLista = setInterval(function(){ fcAtualizarLista() }, 1000);
+            }, error:function(data)
+            {
+                alert("Ocorreu um erro");
+            }
+        }); 
+    }
+
+    var iAtualizarLista = setInterval(function(){ fcAtualizarLista() }, 1000);
+</script>
